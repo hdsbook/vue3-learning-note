@@ -6,6 +6,16 @@
     <title>字串模板 string template</title>
   </head>
   <body>
-    <script></script>
+    <script>
+      // 透過字串模版，可以更方面的進行字串與變數的串接、換行
+      const add = (name, age) => {
+        return `
+          Hi
+          我叫${name}，
+          我今年${age}歲
+        `;
+      };
+      console.log(add("Mike", 12));
+    </script>
   </body>
 </html>

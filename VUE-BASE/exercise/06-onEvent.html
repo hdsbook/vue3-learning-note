@@ -7,15 +7,32 @@
   </head>
   <body>
     <div id="app">
-      <h1></h1>
-      <button>Add</button>
-      <button>Remove</button>
+      <h1>{{ num }}</h1>
+      <h2>{{ NumData.idx }}</h2>
+      <button v-on:click="Add">Add</button>
+      <button @click="Minus">Remove</button>
     </div>
     <script src="./js/vue.js"></script>
     <script>
+      const { ref, reactive } = Vue;
       const App = {
         setup() {
-          return {};
+          const num = ref(0);
+          const NumData = reactive({
+            idx: 0
+          });
+
+          const Add = () => {
+            num.value++;    // ref 將內容包裝成一個物件，要拜訪值要透過.value
+            NumData.idx++;  // reactive 拜訪值不用透過.value
+          }
+          const Minus = () => {
+            num.value--;
+            NumData.idx--;
+          }
+
+          // 函式也要透過 return 返回
+          return { num, NumData, Add, Minus };
         },
       };
       Vue.createApp(App).mount("#app");

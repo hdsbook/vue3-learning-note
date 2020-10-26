@@ -62,8 +62,10 @@
   </head>
   <body>
     <div id="app">
-      <a class="title">課程列表</a>
-      <ul class="box">
+      <a class="title" @click="handOpenClass">課程列表</a>
+      <!-- <ul class="box" :class="{open: isOpen}"> -->
+      <!-- <ul class="box" :style="{height: domH}"> -->
+      <ul class="box" :style="{height: domHFn()}">
         <li v-for="(list, idx) in listArr" :key="list.name">
           {{idx + 1}}. {{list.name}}
         </li>
@@ -71,9 +73,10 @@
     </div>
     <script src="./js/vue.js"></script>
     <script>
-      const { reactive } = Vue;
+      const { ref, reactive, computed } = Vue;
       const App = {
         setup() {
+          const isOpen = ref(true);
           const listArr = reactive([
             { name: "2020 Vue3 專業職人 | 入門篇" },
             { name: "2020 Vue3 專業職人 | 加值篇" },
@@ -81,9 +84,27 @@
             { name: "現代 JavaScript 職人之路｜入門篇" },
             { name: "現代 JavaScript 職人之路｜中階實戰篇" },
           ]);
+          const handOpenClass = () => {
+            isOpen.value = !isOpen.value;
+          }
+
+          const domH = computed(() => {
+            return isOpen.value
+              ? `${listArr.length * 40}px`
+              : '0px';
+          })
+          const domHFn = () => {
+            return isOpen.value
+              ? `${listArr.length * 40}px`
+              : '0px';
+          }
 
           return {
+            isOpen,
+            handOpenClass,
             listArr,
+            domH,
+            domHFn
           };
         },
       };

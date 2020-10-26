@@ -6,12 +6,23 @@
     <title>howToSelect</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">{{ text }}{{ message.text }}</div>
     <script src="./js/vue.js"></script>
     <script>
+      const {ref, reactive} = Vue;
       const App = {
         setup() {
-          return {};
+          // 大部份的情況下，用 ref
+          const text = ref("Hellow Vue");
+
+          // 當內容是物件或陣列時，用 reactive (可以做深層監聽，資料拜訪不用.value)
+          const message = reactive({
+            text: "Mike",
+          })
+          return {
+            text,
+            message
+          };
         },
       };
       Vue.createApp(App).mount("#app");

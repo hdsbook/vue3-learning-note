@@ -18,19 +18,26 @@
   </head>
   <body>
     <div id="app">
-      <div class="content"></div>
+      <!-- 用 v-html 的時候要很小心，如果html中有js程式碼，也會一併載入到頁面上並運作 -->
+      <div class="content" v-html="html"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="./js/vue.js"></script>
     <script>
-      const { onMounted } = Vue;
+      const { onMounted, ref } = Vue;
       const app = {
         setup() {
+          const html = ref('');
           onMounted(() => {
             // api
+            axios.get("https://vue-lessons-api.herokuapp.com/dom/content")
+              .then(res => {
+                console.log(res);
+                html.value = res.data.html;
+              })
           });
 
-          return {};
+          return { html };
         },
       };
 

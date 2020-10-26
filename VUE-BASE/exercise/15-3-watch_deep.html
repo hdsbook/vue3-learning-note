@@ -15,11 +15,21 @@
         setup() {
           const data = ref({ user: {} });
 
-          watch(data, (newVal) => {
+          // 只監聽特定索引
+          watch(data.value.user, (newVal) => {
+            console.log('1---');
             console.log(newVal);
           });
 
-          setTimeout(() => {}, 1000);
+          // 傳入第三參數，給予 deep: true，就可以對 ref 作深層監聽，但效能消耗較大
+          watch(data, (newVal) => {
+            console.log('2---');
+            console.log(newVal);
+          }, {deep: true});
+
+          setTimeout(() => {
+            data.value.user['name'] = 'mike';
+          }, 1000);
 
           return {};
         },

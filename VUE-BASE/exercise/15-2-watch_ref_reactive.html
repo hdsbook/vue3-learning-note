@@ -19,6 +19,28 @@
           const refObj = ref({ idx: 0 });
           const reactiveObj = reactive({ idx: 0 });
 
+          // 當監聽整個 reactive 物件時，可以做深層監聽
+          watch(reactiveObj, (newVal) => {
+            console.log('reactive:' + newVal);
+          })
+
+          // 當監聽整個 ref 物件時，無法做深層監聽
+          watch(refObj, (newVal) => {
+            console.log('ref:' + newVal);
+          })
+
+          // 可以監聽 ref 物件的特定索引，但也是要用函式回傳作為第一個參數
+          watch(
+            () => refObj.value.idx,
+            (newVal) => {
+            console.log('ref.value.idx:' + newVal);
+          })
+
+          setTimeout(() => {
+            refObj.value.idx++;
+            reactiveObj.idx++;
+          }, 1000);
+
           return { refObj, reactiveObj };
         },
       };

@@ -6,6 +6,20 @@
     <title>解構賦值 (Destructuring assignment)</title>
   </head>
   <body>
-    <script></script>
+    <script>
+      const user = {
+        name: "Mike",
+        age: 12,
+        address: "Taiwan",
+      };
+      const { name, age, address } = user;
+      console.log(name, age, address);
+
+      // 直接將物件放到物件中，物件會在物件中自動進行解構(以變數名稱為其key值)
+      const userData = {
+        user, // 會自動解構成 => user: {name: "Mike", ... }
+      };
+      console.log(userData);
+    </script>
   </body>
 </html>

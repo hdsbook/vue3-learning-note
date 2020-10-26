@@ -8,7 +8,12 @@
   <body>
     <div id="app">
       <ul>
-        <li></li>
+        <!-- 1. 使用 v-for 一定要給key (提高渲染效率，發生變動時，不會重新渲染) -->
+        <!-- 2. 使用 v-for 的時候不要拿索引當作 key (位置發生改變時，可能會發生渲染錯誤) -->
+        <!-- 3. 請使用具唯一性的值當 key 的值 (如：資料的 id 值) -->
+        <li v-for="(item, idx) in listArr" v-bind:key="item.courseId" v-show="item.show">
+          {{ idx + 1 }}. {{ item.name }}
+        </li>
       </ul>
     </div>
     <script src="./js/vue.js"></script>
@@ -17,11 +22,11 @@
       const App = {
         setup() {
           const listArr = reactive([
-            { name: "2020 Vue3 專業職人 | 入門篇", show: true },
-            { name: "2020 Vue3 專業職人 | 加值篇", show: false },
-            { name: "2020 Vue3 專業職人 | 進階篇", show: true },
-            { name: "現代 JavaScript 職人之路｜入門篇", show: true },
-            { name: "現代 JavaScript 職人之路｜中階實戰篇", show: false },
+            { courseId: 1, name: "2020 Vue3 專業職人 | 入門篇", show: true },
+            { courseId: 2, name: "2020 Vue3 專業職人 | 加值篇", show: false },
+            { courseId: 3, name: "2020 Vue3 專業職人 | 進階篇", show: true },
+            { courseId: 4, name: "現代 JavaScript 職人之路｜入門篇", show: true },
+            { courseId: 5, name: "現代 JavaScript 職人之路｜中階實戰篇", show: false },
           ]);
           return {
             listArr,

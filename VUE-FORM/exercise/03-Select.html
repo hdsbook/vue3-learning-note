@@ -10,21 +10,64 @@
   <body>
     <div id="app">
       <div class="select-box">
-        <select>
+        <select v-model="selTwzip.city">
           <option disabled value="">請選擇縣市</option>
+          <option
+            v-for="city in twzip.city"
+            :value="city.name"
+            :key="city.name">
+            {{ city.name }}
+          </option>
         </select>
-        <select>
+        <select v-model="selTwzip.area">
           <option disabled value="">請選擇區域</option>
+          <option
+            v-for="area in twzip.area"
+            :value="area.zip"
+            :key="area.zip">
+            {{ area.name }}
+          </option>
         </select>
       </div>
-      <a class="btn">送出</a>
+      <a class="btn" @click.prevent="handSubmit">送出</a>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="./js/vue.js"></script>
     <script>
+      const { reactive, ref, onMounted, watch } = Vue;
+      const API = "https://vue-lessons-api.herokuapp.com/city/list";
+
       const App = {
         setup() {
-          return {};
+          const twzip = reactive({
+            city: [],
+            area: [],
+          })
+
+          const selTwzip = reactive({
+            city: '',
+            area: '',
+          })
+
+          onMounted(() => {
+            axios.get(API).then(res => {
+              twzip.city = res.data.twzip.city;
+            })
+          })
+
+          watch(
+            () => selTwzip.city,
+            (cityName) => {
+              selTwzip.area = '';
+              twzip.area = twzip.city.find(city => city.name === cityName).area
+            }
+          )
+
+          const handSubmit = () => {
+            console.log(selTwzip);
+          }
+
+          return { twzip, selTwzip, handSubmit };
         },
       };
 

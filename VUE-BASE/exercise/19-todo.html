@@ -10,28 +10,76 @@
     <div id="app">
       <div class="wait">
         <ul>
-          <li>
-            <img src="" alt="" />
+          <li
+            v-for="(puzzle, idx) in source.puzzles"
+            :key="puzzle.url"
+            @click="putIn(puzzle, idx)">
+            <img :src="puzzle.url" alt="" />
           </li>
         </ul>
       </div>
       <div class="carried">
         <ul>
-          <li>
-            <img alt="" />
+          <li
+            v-for="(puzzle, idx) in target.puzzles"
+            :key="puzzle.url"
+            @click="putBack(puzzle, idx)">
+            <img :src="puzzle.url" alt="" />
           </li>
         </ul>
       </div>
-      <div class="winPage">
+      <div :class="['winPage', {open: isWin}]">
         <h1>闖關成功</h1>
       </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
     <script src="./js/vue.js"></script>
     <script>
+      const { reactive, onMounted, ref, watch } = Vue;
       const app = {
         setup() {
-          return {};
+          const source = reactive({ puzzles: [] })
+          const target = reactive({ puzzles: [] })
+
+          onMounted(() => {
+            axios.get('./api/puzzle.json').then(res => {
+              source.puzzles = res.data;
+            })
+          })
+
+          const putIn = (puzzle, idx) => {
+            target.puzzles.push(puzzle)
+            source.puzzles.splice(idx, 1)
+          }
+          const putBack = (puzzle, idx) => {
+            source.puzzles.push(puzzle)
+            target.puzzles.splice(idx, 1)
+          }
+
+          const score = ref(0);
+          const isWin = ref(false);
+
+          watch(target.puzzles, (newPuzzles) => {
+            score.value = 0;
+            newPuzzles.forEach((puzzle, idx) => {
+              if (puzzle.idx === idx) {
+                score.value++;
+              }
+            })
+          })
+          watch(score, (newScore) => {
+            if (newScore === 9) {
+              isWin.value = true;
+            }
+          })
+
+          return {
+            source,
+            target,
+            putIn,
+            putBack,
+            isWin,
+          };
         },
       };
       Vue.createApp(app).mount("#app");

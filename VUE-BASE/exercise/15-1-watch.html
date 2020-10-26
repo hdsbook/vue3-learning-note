@@ -10,9 +10,33 @@
 
     <script src="./js/vue.js"></script>
     <script>
-      const { ref, reactive } = Vue;
+      const { ref, reactive, watch } = Vue;
       const App = {
         setup() {
+          const idx = ref(0)
+          const data = reactive({idx: 0})
+
+          watch(idx, (newIdx, oldIdx) => {
+            console.log('ref new:' + newIdx);
+            console.log('ref old:' + oldIdx);
+            console.log('---');
+          })
+
+          // 監聽reactive物件的某個索引時，要用一個函式回傳該物件索引做為第一參數
+          watch(
+            () => data.idx,
+            (newIdx, oldIdx) => {
+              console.log('reactive new:' + newIdx);
+              console.log('reactive old:' + oldIdx);
+              console.log('---');
+            }
+          )
+
+          setInterval(() => {
+            idx.value++;
+            data.idx++;
+          }, 1000)
+
           return {};
         },
       };

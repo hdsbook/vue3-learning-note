@@ -7,13 +7,21 @@
   </head>
   <body>
     <div id="app">
-      <h1></h1>
+      <h1>{{ text }}</h1>
     </div>
     <script src="./js/vue.js"></script>
     <script>
+      const { ref } = Vue;
       const App = {
         setup() {
-          return {};
+          // text 為經 Vue.ref 包裝後的一物件
+          const text = ref("hello world");
+          setTimeout(() => {
+            text.value = 'hi'; // 用 .value 來改變並觸發畫面上的資料變動
+          }, 1000);
+          return {
+            text,
+          };
         },
       };
       Vue.createApp(App).mount("#app");

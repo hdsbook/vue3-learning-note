@@ -10,11 +10,21 @@
 
     <script src="./js/vue.js"></script>
     <script>
-      const { ref, reactive } = Vue;
+      const { ref, reactive, watchEffect } = Vue;
       const App = {
         setup() {
           const num = ref(0);
           const numData = reactive({ idx: 0 });
+
+          // watchEffect 在資料初始化的時候也會被執行一次
+          // 只有有在watchEffect中有被調用到的資料，就會被 watchEffect 監聽
+          const stop = watchEffect(() => {
+            if (num.value > 4) {
+              stop();
+            }
+            console.log(num.value);
+            console.log(numData);
+          })
 
           setTimeout(() => {
             num.value++;

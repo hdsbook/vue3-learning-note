@@ -6,6 +6,16 @@
     <title>ES Module</title>
   </head>
   <body>
-    <script></script>
+    <!-- 用 type="module" 告訴瀏覽器這邊是屬於 es6 module 的用法，讓它認得 import 指令 -->
+    <script type="module">
+      // 除了 default 的東西，其它要用解構的方式 import 進來
+      import Add, { Name, age, Minus } from "./js/Tools.js";
+
+      console.log(Add(1, 2));
+      console.log(Name);
+      console.log(age);
+      console.log(Minus(5, 3));
+
+    </script>
   </body>
 </html>

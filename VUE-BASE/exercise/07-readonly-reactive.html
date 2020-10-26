@@ -1,9 +1,10 @@
+<!-- 探討如何避免資料被修改 -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>readonly</title>
+    <title>readonly-reactive</title>
     <style>
       button {
         color: red;
@@ -12,23 +13,30 @@
   </head>
   <body>
     <div id="app">
-      <h1>{{Num.idx}}</h1>
+      <h1>Num: {{Num.idx}}</h1>
+      <h1>NumReadOnly: {{NumReadOnly.idx}}</h1>
       <button @click="AddFn">Add</button>
-      <button @click="Test">Add copy</button>
+      <button @click="Test">Add ReadOnly</button>
     </div>
     <script src="./js/vue.js"></script>
     <script>
-      const { reactive } = Vue;
+      const { reactive, readonly } = Vue;
       const App = {
         setup() {
           const Num = reactive({ idx: 0 });
+
+          // NumReadOnly 為一個只能取值，不能修改值的物件
+          const NumReadOnly = readonly(Num);
+
           const AddFn = () => {
             Num.idx++;
           };
 
-          const Test = () => {};
+          const Test = () => {
+            NumReadOnly.idx++; // 不被允許
+          };
 
-          return { Num, AddFn, Test };
+          return { Num, NumReadOnly, AddFn, Test };
         },
       };
       Vue.createApp(App).mount("#app");
